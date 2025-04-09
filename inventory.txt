@@ -1,4 +1,4 @@
-Gold: 5
+Gold: 8
 Weapon: Iron Sword
 Pet: Dog
 Armor: Leather Armor
