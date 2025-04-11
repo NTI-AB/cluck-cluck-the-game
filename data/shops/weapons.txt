@@ -1,0 +1,2 @@
+#Name;damage;cost
+Copper Sword;7;2

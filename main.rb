@@ -23,24 +23,24 @@ end
 # Main game loop
 while true
   puts "\n=== MAIN MENU ==="
-  puts "1. Go to village"
-  puts "2. Fight enemy"
-  puts "3. Check inventory"
-  puts "0. Quit game"
-  print "Choose: "
+  puts "Go to village"
+  puts "Fight enemy"
+  puts "Check inventory"
+  puts "Quit game"
+  print "What would you like to do? "
   
-  choice = gets.chomp.to_i
+  choice = gets.chomp.downcase
   
-  if choice == 1
-    village_menu(inventory)
-  elsif choice == 2
-    combat_encounter(inventory)
-  elsif choice == 3
-    show_inventory(inventory)
-  elsif choice == 0
+  if choice == "quit" || choice == "quit game"
     break
+  elsif choice == "village" || choice == "go to village"
+    village_menu(inventory)
+  elsif choice == "fight" || choice == "fight enemy"
+    combat_encounter(inventory)
+  elsif choice == "inventory" || choice == "check inventory" || choice == "inv"
+    show_inventory(inventory)
   else
-    puts "Invalid choice!"
+    puts "Invalid choice! Try 'village', 'fight', or 'inventory'."
   end
 end
 

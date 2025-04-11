@@ -1,4 +1,7 @@
-Gold: 8
-Weapon: Iron Sword
-Pet: Dog
-Armor: Leather Armor
+Gold: 50
+Weapon: Copper Sword
+WeaponDamage: 7
+Armor: Chainmail
+Defense: 4
+Pet: Dog, Stat
+: 

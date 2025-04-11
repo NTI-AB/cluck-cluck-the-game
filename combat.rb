@@ -16,27 +16,21 @@ end
 
 
 def combat_encounter(inventory)
-  
-  
-  #Name;hp;attack damage; gold drop on death
   enemy = choose_enemy()
-  #p enemy
-
   player_hp = 20
-  weapon_damage = { "Rusty Dagger" => 2, "Iron Sword" => 5 }
-  base_damage = weapon_damage[inventory["Weapon"]] || 1
+  base_damage = inventory["WeaponDamage"].to_i
   
   puts "\nA #{enemy[0]} attacks!"
   
   while true
     puts "\nYour HP: #{player_hp} | Enemy HP: #{enemy[1]}"
-    puts "1. Attack"
-    puts "2. Flee"
+    puts "Attack"
+    puts "Flee"
     print "Choose: "
     
-    choice = gets.chomp.to_i
+    choice = gets.chomp.downcase
     
-    if choice == 1
+    if choice == "attack"
       # Player attack
       enemy[1] -= base_damage
       puts "You hit for #{base_damage} damage!"
@@ -57,14 +51,15 @@ def combat_encounter(inventory)
       end
       
       # Enemy attack
-      player_hp -= enemy[2]
-      puts "#{enemy[0]} hits you for #{enemy[2]} damage!"
+      damage_taken = [enemy[2] - inventory["Defense"].to_i, 1].max
+      player_hp -= damage_taken
+      puts "#{enemy[0]} hits you for #{damage_taken} damage!"
       
       if player_hp <= 0
         puts "You died!"
         exit
       end
-    elsif choice == 2
+    elsif choice == "flee"
       lost = [inventory["Gold"].to_i, 3].min
       inventory["Gold"] = (inventory["Gold"].to_i - lost).to_s
       File.open('inventory.txt', 'w') do |file|
@@ -78,7 +73,7 @@ def combat_encounter(inventory)
       puts "Fled! Lost #{lost} gold"
       return
     else
-      puts "Invalid choice!"
+      puts "Invalid choice! Type 'attack' or 'flee'"
     end
   end
 end

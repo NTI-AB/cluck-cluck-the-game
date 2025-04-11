@@ -1,0 +1,3 @@
+#Name;dmgreduc;cost
+Leather vest;2;5
+Chainmail;4;13
