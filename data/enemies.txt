@@ -1,3 +1,29 @@
-#Name;hp;attack damage; gold drop on death
-Bandit; 10; 2; 5
-Wolf; 8; 3; 3 
+#Name;hp;phys_def;magic_def;attack;gold
+
+# HP-FOCUSED (5)
+Stone Golem;25;4;2;3;8          # hp/hp
+Forest Troll;20;8;3;4;6         # hp/phys_def
+Cave Bear;20;8;2;5;7            # hp/phys_def
+Swamp Spirit;20;3;8;4;5         # hp/magic_def
+Mountain Yeti;20;2;8;3;6        # hp/magic_def
+
+# PHYS_DEF-FOCUSED (5)
+Iron Knight;12;18;4;3;7         # phys_def/phys_def
+Desert Sentinel;15;15;3;4;6      # phys_def/hp
+Stone Guardian;15;15;2;5;5       # phys_def/hp
+Frost Warden;10;15;8;3;8         # phys_def/magic_def
+Obsidian Golem;8;15;8;4;7        # phys_def/magic_def
+
+# MAGIC_DEF-FOCUSED (5)
+Arcane Wisp;8;3;18;5;9          # magic_def/magic_def
+Spectral Warrior;12;2;15;4;6     # magic_def/hp
+Void Phantom;12;3;15;3;7         # magic_def/hp
+Crystal Guardian;6;10;15;5;8     # magic_def/phys_def
+Ether Drake;5;10;15;4;9         # magic_def/phys_def
+
+# BALANCED (5)
+Rogue Adventurer;12;7;7;5;10
+Nomad Mercenary;10;10;6;4;9
+Ancient Construct;14;6;6;3;8
+Wandering Mage;8;5;10;6;12
+Hedge Knight;16;5;5;2;6

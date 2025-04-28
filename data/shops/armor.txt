@@ -1,3 +1,11 @@
-#Name;dmgreduc;cost
-Leather vest;2;5
-Chainmail;4;13
+#Name;phys_def;magic_def;cost
+Leather Vest;3;1;10
+Chainmail;6;2;25
+Plated Armor;10;3;45
+Mage Robes;2;8;30
+Scale Mail;8;5;50
+Crystal Aegis;5;10;60
+Dragonhide;12;6;80
+Obsidian Carapace;15;4;100
+Ethereal Cloak;4;12;70
+Holy Plate;9;9;90

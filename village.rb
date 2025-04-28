@@ -10,14 +10,25 @@ def load_items_from_file(filepath)
       # Split the line into components
       parts = line.split(';')
       name = parts[0].strip
-      stat = parts[1].strip.to_i
-      cost = parts[2].strip.to_i
+      phys = parts[1].strip.to_i
+      magic = parts[2].strip.to_i
+      cost = parts[3].strip.to_i
+
+      items << { name: name, phys: phys, magic: magic, cost: cost }
       
-      items << { name: name, stat: stat, cost: cost }
     end
     file.close
   end
   items
+end
+
+# Helper function to save inventory to file
+def save_inventory(inventory)
+  File.open('inventory.txt', 'w') do |file|
+    inventory.each do |key, value|
+      file.puts "#{key}: #{value}"
+    end
+  end
 end
 
 def village_menu(inventory)
@@ -45,7 +56,6 @@ def village_menu(inventory)
     elsif choice == "enchant" || choice == "enchant items"
       #placeholder for enchanting
       enchanting_menu(inventory)
-      "wait, it no done yet"
     elsif choice == "get a dog" || choice == "dog"
       buy_item(inventory, "Pet", "Dog", 10)
     else
@@ -58,131 +68,102 @@ def enchanting_menu(inventory)
   while true
     puts "\n=== ENCHANTING ==="
     
-    # Get weapon info
-    weapon = nil
-    keys = inventory.keys
-    i = 0
-    while i < keys.length
-      if keys[i] == "Weapon"
-        weapon = inventory[keys[i]]
-      end
-      i += 1
-    end
+    # Get current stats
+    phys_dmg = inventory["PhysicalDamage"].to_i
+    magic_dmg = inventory["MagicDamage"].to_i
+    armor_def = inventory["Defense"].to_i
+    gold = inventory["Gold"].to_i
+
+    # Calculate costs
+    phys_cost = (phys_dmg * 3) / 10  # 30% base
+    phys_cost += 1 if (phys_dmg * 3) % 10 != 0  # Round up
     
-    # Get damage
-    damage = 0
-    i = 0
-    while i < keys.length
-      if keys[i] == "WeaponDamage"
-        damage = inventory[keys[i]].to_i
-      end
-      i += 1
-    end
+    magic_cost = (magic_dmg * 3) / 10
+    magic_cost += 1 if (magic_dmg * 3) % 10 != 0
     
-    # Get gold
-    gold = 0
-    i = 0
-    while i < keys.length
-      if keys[i] == "Gold"
-        gold = inventory[keys[i]].to_i
-      end
-      i += 1
-    end
+    armor_cost = (armor_def * 3) / 10
+    armor_cost += 1 if (armor_def * 3) % 10 != 0
+
+    # Calculate bonuses
+    phys_bonus = phys_dmg / 10  # 10% base
+    phys_bonus = 1 if phys_bonus == 0
     
-    # Check if player has weapon
-    has_weapon = true
-    if weapon == nil
-      has_weapon = false
-    end
-    if damage <= 0
-      has_weapon = false
-    end
+    magic_bonus = magic_dmg / 10
+    magic_bonus = 1 if magic_bonus == 0
     
-    if has_weapon == false
-      puts "You don't have a weapon to enchant!"
-      break
-    end
-    
-    # Calculate cost and enhancement
-    cost = (damage * 3) / 10
-    if damage / 10 == 0
-      enchantment = 1
-    else
-    enhancement = damage / 10
-    end
-    
-    puts "Current Weapon: #{weapon} (Damage: #{damage})"
-    puts "Gold: #{gold}"
-    puts "Enchanting Cost: #{cost} gold"
-    puts "Damage Increase: +#{enhancement}"
-    puts "1. Enchant Weapon"
-    puts "0. Back to Village"
+    armor_bonus = armor_def / 10
+    armor_bonus = 1 if armor_bonus == 0
+
+    puts "1. Enhance #{colorize('Physical', :yellow)} (+#{phys_bonus}) - #{colorize(phys_cost.to_s + ' gold', :green)}"
+    puts "2. Enhance #{colorize('Magic', :blue)} (+#{magic_bonus}) - #{colorize(magic_cost.to_s + ' gold', :green)}" 
+    puts "3. Enhance Armor (+#{armor_bonus}) - #{colorize(armor_cost.to_s + ' gold', :green)}"
+    puts "0. Back"
     print "Choose: "
-    
+
+    # Rest of the function remains the same
     choice = gets.chomp
-    
-    if choice == "0"
-      break
-    end
-    if choice == "1"
-      if gold >= cost
-        # Update gold
-        new_gold = gold - cost
-        i = 0
-        while i < keys.length
-          if keys[i] == "Gold"
-            inventory[keys[i]] = new_gold.to_s
-          end
-          i += 1
-        end
-        
-        # Update damage
-        new_damage = damage + enhancement
-        i = 0
-        while i < keys.length
-          if keys[i] == "WeaponDamage"
-            inventory[keys[i]] = new_damage.to_s
-          end
-          i += 1
-        end
-        
-        # Save to file
-        file = File.open('inventory.txt', 'w')
-        i = 0
-        while i < keys.length
-          file.puts "#{keys[i]}: #{inventory[keys[i]]}"
-          i += 1
-        end
-        file.close
-        
-        puts "Your #{weapon} has been enchanted! New Damage: #{new_damage}"
+
+    case choice
+    when "1"
+      if gold >= phys_cost
+        inventory["Gold"] = (gold - phys_cost).to_s
+        inventory["PhysicalDamage"] = (phys_dmg + phys_bonus).to_s
+        puts "Physical enhanced! New: #{colorize(inventory["PhysicalDamage"], :yellow)}"
+        save_inventory(inventory)
       else
-        puts "Not enough gold to enchant your weapon!"
+        puts "Not enough gold!"
       end
+    when "2"
+      if gold >= magic_cost
+        inventory["Gold"] = (gold - magic_cost).to_s
+        inventory["MagicDamage"] = (magic_dmg + magic_bonus).to_s
+        puts "Magic enhanced! New: #{colorize(inventory["MagicDamage"], :blue)}"
+        save_inventory(inventory)
+      else
+        puts "Not enough gold!"
+      end
+    when "3"
+      if gold >= armor_cost
+        inventory["Gold"] = (gold - armor_cost).to_s
+        inventory["Defense"] = (armor_def + armor_bonus).to_s
+        puts "Armor enhanced! New: #{inventory["Defense"]}"
+        save_inventory(inventory)
+      else
+        puts "Not enough gold!"
+      end
+    when "0"
+      break
     else
       puts "Invalid choice!"
     end
   end
 end
-
-
+    
 def shop_section(title, items, inventory, type)
   while true
     puts "\n=== #{title.upcase} ==="
-    puts "Gold: #{inventory["Gold"]}"
+    puts "Gold: #{colorize(inventory["Gold"], :green)}"
     items.each_with_index do |item, index|
-      puts "#{index + 1}. #{item[:name]} (#{item[:cost]} gold) - #{type == 'Weapon' ? 'Damage' : 'Protection'}: #{item[:stat]}"
+      phys_stats = colorize("Phys: #{item[:phys]}", :yellow)
+      magic_stats = colorize("Magic: #{item[:magic]}", :blue) if item[:magic]
+      stats = type == "Weapon" ? "#{phys_stats}, #{magic_stats}" : phys_stats
+      puts "#{index + 1}. #{item[:name]} (#{colorize(item[:cost].to_s + ' gold', :green)}) - #{stats}"
     end
     puts "0. Back"
     print "Choose: "
 
+    # Rest of function remains the same
     choice = gets.chomp
 
     if choice == "0" || choice.downcase == "back"
-      b reak
+      break
     elsif choice.to_i > 0 && choice.to_i <= items.length
       selected_item = items[choice.to_i - 1]
-      buy_item(inventory, type, selected_item[:name], selected_item[:cost], selected_item[:stat])
+      if type == "Weapon"
+        buy_item_with_stats(inventory, type, selected_item[:name], selected_item[:cost], selected_item[:phys], selected_item[:magic])
+      elsif type == "Armor"
+        buy_item_with_stats(inventory, type, selected_item[:name], selected_item[:cost], selected_item[:phys])
+      end
     else
       puts "Invalid choice! Use numbers or type 'back'"
     end
@@ -197,21 +178,41 @@ def buy_item(inventory, type, item, price, stat = nil)
     # Update inventory with the purchased item and its stats
     if type == "Weapon"
       inventory["Weapon"] = item
-      inventory["WeaponDamage"] = stat.to_s
+      inventory["PhysicalDamage"] = stat[:phys].to_s
+      inventory["MagicDamage"] = stat[:magic].to_s
     elsif type == "Armor"
       inventory["Armor"] = item
       inventory["Defense"] = stat.to_s
     elsif type == "Pet"
       inventory["Pet"] = item
-
     end
 
-    # Write updated inventory to file
-    File.open('inventory.txt', 'w') do |file|
-      inventory.each do |key, value|
-        file.puts "#{key}: #{value}"
-      end
+    # Save inventory to file
+    save_inventory(inventory)
+
+    puts "You bought #{item}!"
+  else
+    puts "Not enough gold!"
+  end
+end
+
+def buy_item_with_stats(inventory, type, item, price, phys, magic = nil)
+  gold = inventory["Gold"].to_i
+  if gold >= price
+    inventory["Gold"] = (gold - price).to_s
+
+    # Update inventory with the purchased item and its stats
+    if type == "Weapon"
+      inventory["Weapon"] = item
+      inventory["PhysicalDamage"] = phys.to_s
+      inventory["MagicDamage"] = magic.to_s
+    elsif type == "Armor"
+      inventory["Armor"] = item
+      inventory["Defense"] = phys.to_s
     end
+
+    # Save inventory to file
+    save_inventory(inventory)
 
     puts "You bought #{item}!"
   else

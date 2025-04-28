@@ -1,2 +1,13 @@
-#Name;damage;cost
-Copper Sword;7;2
+#Name;phys_dmg;magic_dmg;cost
+Rusty Dagger;3;0;5
+Copper Sword;5;2;15
+Iron Battleaxe;8;1;30
+Steel Claymore;10;3;50
+Silver Rapier;7;6;45
+Obsidian Mace;12;0;60
+Crystal Wand;2;9;40
+Frost Brand;6;8;65
+Inferno Blade;9;7;80
+Dragonbone Sword;15;5;100
+Celestial Scepter;4;12;90
+Void Edge;10;10;120
