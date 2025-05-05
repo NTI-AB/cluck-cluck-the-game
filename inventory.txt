@@ -1,6 +1,6 @@
-Gold: 20
-Weapon: Beginners shortsword
-PhysicalDamage: 4
-MagicDamage: 1
+Gold: 5
+Weapon: Copper Sword
+PhysicalDamage: 5
+MagicDamage: 2
 Armor: Tunic
 Defense: 1

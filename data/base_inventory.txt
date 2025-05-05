@@ -1,6 +1,6 @@
 Gold: 20
 Weapon: Beginners shortsword
 PhysicalDamage: 4
-MagicDamage: 1
+MagicDamage: 3
 Armor: Tunic
 Defense: 1

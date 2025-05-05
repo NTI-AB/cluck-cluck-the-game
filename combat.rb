@@ -1,3 +1,8 @@
+#Function takes a random enemy from file, then scales stats based on player stats.
+#Input: inventory
+#Output: enemy and stats
+
+
 def choose_enemy(inventory)
   # Make sure we're reading the file correctly
   enemy_file_path = "data/enemies.txt"
@@ -22,7 +27,6 @@ def choose_enemy(inventory)
     exit
   end
   
-  # Select a random enemy
   enemy = enemies.sample
   
   # Make sure the enemy data has enough elements
@@ -38,6 +42,8 @@ def choose_enemy(inventory)
     i += 1
   end
   
+  
+
   # Reduce scaling to make early game easier
   player_phys = inventory["PhysicalDamage"].to_i
   player_magic = inventory["MagicDamage"].to_i

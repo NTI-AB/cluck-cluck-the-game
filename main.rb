@@ -1,10 +1,12 @@
 require_relative 'village'
 require_relative 'combat'
 
+
+#Lånad kod från Joshua, ska ändra färg på texten. Vet ej var han fick det ifrån.
 COLORS = {
   red: "\e[31m",
   green: "\e[32m",
-  yellow: "\e[33m",  # This will represent orange
+  yellow: "\e[33m", 
   blue: "\e[34m",
   magenta: "\e[35m",
   cyan: "\e[36m",
@@ -15,13 +17,13 @@ def colorize(text, color)
   "#{COLORS[color]}#{text}#{COLORS[:reset]}"
 end
 
+
 def show_inventory(inventory)
   puts "\n=== INVENTORY ==="
   keys = inventory.keys
   i = 0
   while i < keys.length
     value = inventory[keys[i]]
-    # Color code based on key type
     if keys[i] == "PhysicalDamage"
       value = colorize(value, :yellow)
     elsif keys[i] == "MagicDamage"
@@ -34,7 +36,7 @@ def show_inventory(inventory)
   end
 end
 
-# Load initial inventory
+# Ladda inventory från fil eller skapa en ny
 inventory = {}
 if File.exist?('inventory.txt')
   File.open('inventory.txt', 'r') do |file|
@@ -94,11 +96,26 @@ while true
     puts "You wake up in a field, confused and disoriented."
     sleep(3)
     
+    # Load base inventory
+    base_inventory = {}
+    File.open('data/base_inventory.txt', 'r') do |file|
+      while line = file.gets
+        key, value = line.chomp.split(': ')
+        base_inventory[key] = value
+      end
+    end
+    
+    # Write to inventory.txt
+    save_inventory(base_inventory)
+
     puts "Not knowing where you are, or how you got here, you begin exploring."
     exec("ruby #{$0}") # Restarts the script
+
+   
+
   else
     invalid_attempts += 1
-    if invalid_attempts >= 2
+    if invalid_attempts >= 3
       puts "Invalid choice! Try 'village', 'fight', 'inventory', or if you're that lost, just type 'kill yourself' to restart."
     else
       puts "Invalid choice! Try 'village', 'fight', or 'inventory'."

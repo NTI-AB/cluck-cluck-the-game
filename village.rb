@@ -54,7 +54,6 @@ def village_menu(inventory)
     elsif choice == "armor"
       shop_section("Armor", armor, inventory, "Armor")
     elsif choice == "enchant" || choice == "enchant items"
-      #placeholder for enchanting
       enchanting_menu(inventory)
     elsif choice == "get a dog" || choice == "dog"
       buy_item(inventory, "Pet", "Dog", 10)
