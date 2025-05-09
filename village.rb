@@ -54,6 +54,7 @@ def village_menu(inventory)
     elsif choice == "armor"
       shop_section("Armor", armor, inventory, "Armor")
     elsif choice == "enchant" || choice == "enchant items"
+
       enchanting_menu(inventory)
     elsif choice == "get a dog" || choice == "dog"
       buy_item(inventory, "Pet", "Dog", 10)
@@ -194,6 +195,22 @@ def buy_item(inventory, type, item, price, stat = nil)
     puts "Not enough gold!"
   end
 end
+
+# Beskrivning: Köper föremål och uppdaterar inventory med dess stats. Drar kostnad från guld.
+# Argument 1: Hash - inventory: Måste innehålla "Gold".
+# Argument 2: String - type: "Weapon" eller "Armor".
+# Argument 3: String - item: Föremålets namn.
+# Argument 4: Integer - price: Pris i guld.
+# Argument 5: Integer - phys: Fysisk skada/försvar.
+# Argument 6: Integer (optional) - magic: Magisk skada (endast vapen).
+# Return: nil (mutear inventory)
+# Exempel:
+#   buy_item_with_stats({"Gold"=>"100"}, "Weapon", "Frost Brand", 65, 6, 8)
+#   # => Uppdaterar inventory med vapen och drar 65 gold
+#   buy_item_with_stats({"Gold"=>"10"}, "Weapon", "Dragonbone Sword", 100, 15, 5)
+#   # => Skriver "Not enough gold!" (för lite guld)
+# Av: Axel Börjeson
+# Datu,: 2023-05-15
 
 def buy_item_with_stats(inventory, type, item, price, phys, magic = nil)
   gold = inventory["Gold"].to_i

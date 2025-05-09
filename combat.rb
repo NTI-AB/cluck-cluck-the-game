@@ -1,7 +1,12 @@
-#Function takes a random enemy from file, then scales stats based on player stats.
-#Input: inventory
-#Output: enemy and stats
-
+# Beskrivning: Genererar en slumpmässig fiende från enemies.txt och skalar dess stats baserat på spelarens skadekapacitet.
+# Argument 1: Hash - inventory: Innehåller nycklarna "PhysicalDamage" och "MagicDamage" för skalning.
+# Return: Array - [namn, hp, phys_def, magic_def, attack, gold] med skalade värden.
+# Exempel:
+#   choose_enemy({"PhysicalDamage"=>"4", "MagicDamage"=>"3"}) # => ["Forest Troll", 21, 8, 3, 4, 6]
+#   choose_enemy({"PhysicalDamage"=>"15", "MagicDamage"=>"10"}) # => ["Obsidian Golem", 18, 18, 10, 4, 7]
+#   choose_enemy({}) # => Kräschar (saknar required keys)
+# Av: Axel Börjeson
+# Datum: 2023-05-15
 
 def choose_enemy(inventory)
   # Make sure we're reading the file correctly
@@ -73,6 +78,18 @@ def save_inventory(inventory)
     end
   end
 end
+
+# Beskrivning: Hanterar en helt strid mellan spelaren och en fiende, inklusive attackval, skadeberäkning och flykt.
+# Argument 1: Hash - inventory: Spelarens inventory med vapen, skydd och guld.
+# Return: nil (mutear inventory vid vinst/flykt, startar om spelet vid död).
+# Exempel:
+#   combat_encounter({"PhysicalDamage"=>5, "MagicDamage"=>3, "Gold"=>20, "Defense"=>2})
+#   # => Startar stridssekvens med slumpad fiende
+# Specialfall:
+#   - Vid död: Återställer inventory och startar om spelet
+#   - Vid flykt: Drar 1-3 guld från inventory
+# Av: Axel Börjeson
+# Datum: 2023-05-15
 
 def combat_encounter(inventory)
   enemy = choose_enemy(inventory)
